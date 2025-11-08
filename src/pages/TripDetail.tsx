@@ -1,17 +1,15 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AuthGuard from "@/components/AuthGuard";
 import BottomNav from "@/components/BottomNav";
+import { RundownAcara } from "@/components/RundownAcara";
+import { TripFinancialTab } from "@/components/TripFinancialTab";
+import { TripDocumentationTab } from "@/components/TripDocumentationTab";
+import { VehicleTab } from "@/components/VehicleTab";
 import NoteDialog from "@/components/NoteDialog";
 import { TripPriceNoteDialog } from "@/components/TripPriceNoteDialog";
 import { TripDestinationsCard } from "@/components/TripDestinationsCard";
-
-// Lazy load tab components
-const RundownAcara = lazy(() => import("@/components/RundownAcara").then(m => ({ default: m.RundownAcara })));
-const TripFinancialTab = lazy(() => import("@/components/TripFinancialTab").then(m => ({ default: m.TripFinancialTab })));
-const TripDocumentationTab = lazy(() => import("@/components/TripDocumentationTab").then(m => ({ default: m.TripDocumentationTab })));
-const VehicleTab = lazy(() => import("@/components/VehicleTab").then(m => ({ default: m.VehicleTab })));
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -325,23 +323,17 @@ const TripDetail = () => {
 
             {/* Tab 2: Kendaraan */}
             <TabsContent value="kendaraan">
-              <Suspense fallback={<div className="flex justify-center py-8"><div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent"></div></div>}>
-                <VehicleTab tripId={tripId!} />
-              </Suspense>
+              <VehicleTab tripId={tripId!} />
             </TabsContent>
 
             {/* Tab 3: Keuangan */}
             <TabsContent value="keuangan">
-              <Suspense fallback={<div className="flex justify-center py-8"><div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent"></div></div>}>
-                <TripFinancialTab tripId={tripId!} />
-              </Suspense>
+              <TripFinancialTab tripId={tripId!} />
             </TabsContent>
 
             {/* Tab 4: Rundown */}
             <TabsContent value="rundown">
-              <Suspense fallback={<div className="flex justify-center py-8"><div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent"></div></div>}>
-                <RundownAcara tripId={tripId!} />
-              </Suspense>
+              <RundownAcara tripId={tripId!} />
             </TabsContent>
 
             {/* Tab 5: Catatan Kegiatan */}
@@ -388,9 +380,7 @@ const TripDetail = () => {
 
             {/* Tab 6: Dokumentasi */}
             <TabsContent value="dokumentasi">
-              <Suspense fallback={<div className="flex justify-center py-8"><div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent"></div></div>}>
-                <TripDocumentationTab tripId={tripId!} />
-              </Suspense>
+              <TripDocumentationTab tripId={tripId!} />
             </TabsContent>
           </Tabs>
         </div>
