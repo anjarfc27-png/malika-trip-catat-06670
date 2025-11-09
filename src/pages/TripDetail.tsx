@@ -16,7 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ArrowLeft, Calendar, MapPin, Plus, StickyNote, Bus, Users, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Plus, StickyNote, Bus, Users, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
@@ -62,6 +63,7 @@ const TripDetail = () => {
   const [detailsExpanded, setDetailsExpanded] = useState(false);
   const [editingPriceNote, setEditingPriceNote] = useState<PriceNote | undefined>();
   const [priceNotesExpanded, setPriceNotesExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (tripId) {
@@ -173,14 +175,23 @@ const TripDetail = () => {
     <AuthGuard>
       <div className="min-h-screen bg-background pb-20 safe-top">
         <div className="max-w-lg mx-auto p-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/trips")}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2 mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/trips")}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div className="flex-1">
+              <Input
+                placeholder="Cari catatan, destinasi, keuangan..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-9"
+              />
+            </div>
+          </div>
 
           {/* Trip Header */}
           <div className="ios-card p-5 mb-6">

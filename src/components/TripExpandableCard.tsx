@@ -26,6 +26,15 @@ interface PriceNote {
   jumlah: number;
 }
 
+interface DestinationNote {
+  destinasi_1?: string;
+  destinasi_2?: string;
+  destinasi_3?: string;
+  destinasi_4?: string;
+  destinasi_5?: string;
+  destinasi_6?: string;
+}
+
 interface Trip {
   id: string;
   nama_trip: string;
@@ -45,6 +54,7 @@ interface TripExpandableCardProps {
 export const TripExpandableCard = ({ trip, onClick, onTripUpdated }: TripExpandableCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [priceNotes, setPriceNotes] = useState<PriceNote[]>([]);
+  const [destinationNote, setDestinationNote] = useState<DestinationNote | null>(null);
   const [loading, setLoading] = useState(false);
   const [priceDialogOpen, setPriceDialogOpen] = useState(false);
   const [editTripDialogOpen, setEditTripDialogOpen] = useState(false);
@@ -73,6 +83,17 @@ export const TripExpandableCard = ({ trip, onClick, onTripUpdated }: TripExpanda
 
       if (priceError) throw priceError;
       setPriceNotes(priceData || []);
+
+      // Load destination notes
+      const { data: destData, error: destError } = await supabase
+        .from("trip_destination_notes")
+        .select("*")
+        .eq("trip_id", trip.id)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (destError && destError.code !== "PGRST116") throw destError;
+      setDestinationNote(destData);
     } catch (error: any) {
       console.error("Error loading notes:", error);
       toast.error("Gagal memuat catatan");
@@ -159,6 +180,36 @@ export const TripExpandableCard = ({ trip, onClick, onTripUpdated }: TripExpanda
 
             <CollapsibleContent>
               <div className="pt-4 space-y-4">
+                {/* Catatan Destinasi Section */}
+                {destinationNote && (
+                  <div className="border-t pt-4">
+                    <h4 className="font-medium text-sm mb-2">Catatan Destinasi</h4>
+                    {loading ? (
+                      <div className="text-center py-4">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto"></div>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {[
+                          destinationNote.destinasi_1,
+                          destinationNote.destinasi_2,
+                          destinationNote.destinasi_3,
+                          destinationNote.destinasi_4,
+                          destinationNote.destinasi_5,
+                          destinationNote.destinasi_6,
+                        ]
+                          .filter(Boolean)
+                          .map((dest, idx) => (
+                            <div key={idx} className="text-sm p-2 bg-muted/30 rounded">
+                              <span className="text-xs text-muted-foreground">Destinasi {idx + 1}:</span>
+                              <p className="font-medium">{dest}</p>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Catatan Harga Section */}
                 <div className="border-t pt-4">
                   <div className="flex items-center justify-between mb-2">

@@ -9,12 +9,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface DestinationNote {
-  destinasi1: string;
-  destinasi2?: string;
-  destinasi3?: string;
-  destinasi4?: string;
-  destinasi5?: string;
-  destinasi6?: string;
+  destinasi_1: string;
+  destinasi_2?: string;
+  destinasi_3?: string;
+  destinasi_4?: string;
+  destinasi_5?: string;
+  destinasi_6?: string;
 }
 
 interface TripDestinationsCardProps {
@@ -23,12 +23,12 @@ interface TripDestinationsCardProps {
 }
 
 export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardProps) => {
-  const [note, setNote] = useState<DestinationNote>({ destinasi1: "" });
+  const [note, setNote] = useState<DestinationNote>({ destinasi_1: "" });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Form state
-  const [formData, setFormData] = useState<DestinationNote>({ destinasi1: "" });
+  const [formData, setFormData] = useState<DestinationNote>({ destinasi_1: "" });
 
   useEffect(() => {
     loadNote();
@@ -65,20 +65,20 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
       
       if (data) {
         setNote({
-          destinasi1: data.destinasi1 || "",
-          destinasi2: data.destinasi2 || "",
-          destinasi3: data.destinasi3 || "",
-          destinasi4: data.destinasi4 || "",
-          destinasi5: data.destinasi5 || "",
-          destinasi6: data.destinasi6 || "",
+          destinasi_1: data.destinasi_1 || "",
+          destinasi_2: data.destinasi_2 || "",
+          destinasi_3: data.destinasi_3 || "",
+          destinasi_4: data.destinasi_4 || "",
+          destinasi_5: data.destinasi_5 || "",
+          destinasi_6: data.destinasi_6 || "",
         });
         setFormData({
-          destinasi1: data.destinasi1 || "",
-          destinasi2: data.destinasi2 || "",
-          destinasi3: data.destinasi3 || "",
-          destinasi4: data.destinasi4 || "",
-          destinasi5: data.destinasi5 || "",
-          destinasi6: data.destinasi6 || "",
+          destinasi_1: data.destinasi_1 || "",
+          destinasi_2: data.destinasi_2 || "",
+          destinasi_3: data.destinasi_3 || "",
+          destinasi_4: data.destinasi_4 || "",
+          destinasi_5: data.destinasi_5 || "",
+          destinasi_6: data.destinasi_6 || "",
         });
       }
     } catch (error: any) {
@@ -106,12 +106,12 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
         const { error } = await supabase
           .from("trip_destination_notes")
           .update({
-            destinasi1: formData.destinasi1,
-            destinasi2: formData.destinasi2 || null,
-            destinasi3: formData.destinasi3 || null,
-            destinasi4: formData.destinasi4 || null,
-            destinasi5: formData.destinasi5 || null,
-            destinasi6: formData.destinasi6 || null,
+            destinasi_1: formData.destinasi_1,
+            destinasi_2: formData.destinasi_2 || null,
+            destinasi_3: formData.destinasi_3 || null,
+            destinasi_4: formData.destinasi_4 || null,
+            destinasi_5: formData.destinasi_5 || null,
+            destinasi_6: formData.destinasi_6 || null,
           })
           .eq("id", existing.id);
 
@@ -120,12 +120,12 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
         const { error } = await supabase.from("trip_destination_notes").insert({
           trip_id: tripId,
           user_id: user.id,
-          destinasi1: formData.destinasi1,
-          destinasi2: formData.destinasi2 || null,
-          destinasi3: formData.destinasi3 || null,
-          destinasi4: formData.destinasi4 || null,
-          destinasi5: formData.destinasi5 || null,
-          destinasi6: formData.destinasi6 || null,
+          destinasi_1: formData.destinasi_1,
+          destinasi_2: formData.destinasi_2 || null,
+          destinasi_3: formData.destinasi_3 || null,
+          destinasi_4: formData.destinasi_4 || null,
+          destinasi_5: formData.destinasi_5 || null,
+          destinasi_6: formData.destinasi_6 || null,
         });
 
         if (error) throw error;
@@ -141,12 +141,12 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
   };
 
   const destinasiArray = [
-    note.destinasi1,
-    note.destinasi2,
-    note.destinasi3,
-    note.destinasi4,
-    note.destinasi5,
-    note.destinasi6,
+    note.destinasi_1,
+    note.destinasi_2,
+    note.destinasi_3,
+    note.destinasi_4,
+    note.destinasi_5,
+    note.destinasi_6,
   ].filter(Boolean);
 
   return (
@@ -180,9 +180,9 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
                 <div>
                   <Label>Destinasi 1 (Wajib)</Label>
                   <Input
-                    value={formData.destinasi1}
+                    value={formData.destinasi_1}
                     onChange={(e) =>
-                      setFormData({ ...formData, destinasi1: e.target.value })
+                      setFormData({ ...formData, destinasi_1: e.target.value })
                     }
                     placeholder="Nama destinasi"
                     required
@@ -193,11 +193,11 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
                   <div key={num}>
                     <Label>Destinasi {num} (Opsional)</Label>
                     <Input
-                      value={formData[`destinasi${num}` as keyof DestinationNote] || ""}
+                      value={formData[`destinasi_${num}` as keyof DestinationNote] || ""}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          [`destinasi${num}`]: e.target.value,
+                          [`destinasi_${num}`]: e.target.value,
                         })
                       }
                       placeholder="Nama destinasi"
