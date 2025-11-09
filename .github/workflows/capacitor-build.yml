@@ -90,7 +90,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew wrapper --gradle-version=8.2 --distribution-type=bin
+          ./gradlew wrapper --gradle-version=8.9 --distribution-type=all
 
       - name: Sync Capacitor
         run: npx cap sync android
