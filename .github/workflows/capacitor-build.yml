@@ -32,7 +32,6 @@ jobs:
         run: |
           if [ ! -f resources/icon.png ]; then
             echo "Error: resources/icon.png not found!"
-            echo "Please ensure the icon file exists in the resources/ directory"
             exit 1
           fi
           echo "Icon file verified at resources/icon.png"
@@ -43,11 +42,6 @@ jobs:
 
       - name: Generate app icons for Android
         run: npx @capacitor/assets generate --iconBackgroundColor '#0088FF' --iconBackgroundColorDark '#003366' --android
-
-      - name: Verify resources icon (Android)
-        run: |
-          echo "Listing resources/ and generated Android mipmap icons"
-          ls -la resources || true
 
       - name: Create Capacitor config
         run: |
@@ -79,16 +73,18 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install -g @capacitor/cli
 
-      # ✅ DIPINDAH KE SETELAH KONFIGURASI ADA
-      - name: Add Android platform
-        run: npx cap add android
-
       - name: Verify Capacitor versions
         run: |
           echo "Checking Capacitor environment..."
           npx cap doctor || true
           echo "Checking Capacitor packages..."
           npm list @capacitor/core @capacitor/android || true
+
+      - name: Clean Android folder
+        run: rm -rf android
+
+      - name: Add Android platform
+        run: npx cap add android
 
       - name: Update Gradle Wrapper
         run: |
@@ -172,6 +168,9 @@ jobs:
 
       - name: Install Capacitor CLI
         run: npm install -g @capacitor/cli
+
+      - name: Clean iOS folder
+        run: rm -rf ios
 
       - name: Add iOS platform
         run: npx cap add ios
