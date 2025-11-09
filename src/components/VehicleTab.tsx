@@ -229,13 +229,13 @@ export const VehicleTab = ({ tripId }: VehicleTabProps) => {
                 />
               </div>
               <div>
-                <Label>Jumlah Penumpang per Bus</Label>
+                <Label>Jumlah Penumpang </Label>
                 <Input
                   type="number"
                   min="1"
                   value={formData.jumlah_penumpang_per_bus}
                   onChange={(e) => setFormData({ ...formData, jumlah_penumpang_per_bus: e.target.value })}
-                  placeholder="Contoh: 50"
+                  placeholder="Contoh: 200"
                   required
                 />
               </div>

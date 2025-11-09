@@ -73,13 +73,6 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install -g @capacitor/cli
 
-      - name: Verify Capacitor versions
-        run: |
-          echo "Checking Capacitor environment..."
-          npx cap doctor || true
-          echo "Checking Capacitor packages..."
-          npm list @capacitor/core @capacitor/android || true
-
       - name: Clean Android folder
         run: rm -rf android
 
