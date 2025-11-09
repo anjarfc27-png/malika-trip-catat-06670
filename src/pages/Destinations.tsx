@@ -29,6 +29,20 @@ const Destinations = () => {
 
   useEffect(() => {
     loadDestinations();
+
+    // Realtime subscription for destinations
+    const channel = supabase
+      .channel("destinations-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "destinations" },
+        () => loadDestinations()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const loadDestinations = async () => {

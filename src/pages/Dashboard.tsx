@@ -70,6 +70,20 @@ const Dashboard = () => {
   useEffect(() => {
     loadData();
     setupNotificationListeners();
+
+    // Realtime subscription for reminders to update badge count
+    const remindersChannel = supabase
+      .channel("dashboard-reminders")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "reminders" },
+        () => loadData()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(remindersChannel);
+    };
   }, []);
 
   useEffect(() => {

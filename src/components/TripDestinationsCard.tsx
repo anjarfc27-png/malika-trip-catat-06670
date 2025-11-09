@@ -32,6 +32,20 @@ export const TripDestinationsCard = ({ tripId, tripName }: TripDestinationsCardP
 
   useEffect(() => {
     loadNote();
+
+    // Realtime subscription for trip destination notes
+    const channel = supabase
+      .channel(`trip-destination-notes-${tripId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "trip_destination_notes", filter: `trip_id=eq.${tripId}` },
+        () => loadNote()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [tripId]);
 
   const loadNote = async () => {

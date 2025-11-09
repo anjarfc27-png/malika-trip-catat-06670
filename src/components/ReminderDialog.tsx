@@ -45,6 +45,20 @@ export const ReminderDialog = ({ open, onOpenChange }: ReminderDialogProps) => {
     if (open) {
       loadTrips();
     }
+
+    // Realtime subscription for reminders
+    const channel = supabase
+      .channel("reminders-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "reminders" },
+        () => loadReminders()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [open]);
 
   useEffect(() => {
