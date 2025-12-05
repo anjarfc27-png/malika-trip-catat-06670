@@ -26,6 +26,28 @@ const Laporan = () => {
 
   useEffect(() => {
     loadReportData();
+
+    // Realtime subscriptions for report data
+    const tripsChannel = supabase
+      .channel("report-trips")
+      .on("postgres_changes", { event: "*", schema: "public", table: "trips" }, () => loadReportData())
+      .subscribe();
+
+    const keuanganChannel = supabase
+      .channel("report-keuangan")
+      .on("postgres_changes", { event: "*", schema: "public", table: "keuangan" }, () => loadReportData())
+      .subscribe();
+
+    const mediaChannel = supabase
+      .channel("report-media")
+      .on("postgres_changes", { event: "*", schema: "public", table: "media" }, () => loadReportData())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(tripsChannel);
+      supabase.removeChannel(keuanganChannel);
+      supabase.removeChannel(mediaChannel);
+    };
   }, []);
 
   const loadReportData = async () => {

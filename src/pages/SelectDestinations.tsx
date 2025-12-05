@@ -35,6 +35,20 @@ const SelectDestinations = () => {
       return;
     }
     loadDestinations();
+
+    // Realtime subscription for destinations
+    const channel = supabase
+      .channel("destinations-select-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "destinations" },
+        () => loadDestinations()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [tripId]);
 
   const loadDestinations = async () => {
